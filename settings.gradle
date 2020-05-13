@@ -1,0 +1,2 @@
+rootProject.name='Rattrapage-Covid19'
+include ':app'
