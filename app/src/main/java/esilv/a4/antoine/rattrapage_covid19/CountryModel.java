@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 public class CountryModel {
 
 
+
     @SerializedName("country")
     private String country;
     @SerializedName("cases")

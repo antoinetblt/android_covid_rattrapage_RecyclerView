@@ -17,6 +17,7 @@
             android:padding="10dp"
             android:orientation="vertical">
 
+
             <TextView
                 android:id="@+id/country_name"
                 android:text="Country name"

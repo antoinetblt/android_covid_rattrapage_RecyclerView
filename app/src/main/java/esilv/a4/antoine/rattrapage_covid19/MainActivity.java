@@ -1,15 +1,17 @@
 package esilv.a4.antoine.rattrapage_covid19;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Collections;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.List;
 
 import retrofit2.Call;
@@ -27,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        textViewResult = findViewById(R.id.text_view_result);
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://coronavirus-19-api.herokuapp.com/")
@@ -42,28 +44,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<CountryModel>> call, Response<List<CountryModel>> response) {
 
-                if ( !response.isSuccessful()) {
-                    textViewResult.setText("Code : "+response.code());
-                    return;
-                }
+                final List<CountryModel> countryModels = response.body();
 
-                List<CountryModel> countryModels = response.body();
+                recyclerView.setAdapter(new MyAdapter(this, countryModels, R.layout.activity_main));
 
-                for (CountryModel countryModel : countryModels) {
-                    String content ="";
-                    content += countryModel.getCountry();
-                    content += "    Cases : " + countryModel.getCases();
-                    content += "    Deaths : " + countryModel.getDeaths() + "\n";
-
-                    textViewResult.append(content);
-                }
 
             }
 
             @Override
             public void onFailure(Call<List<CountryModel>> call, Throwable t) {
 
-                textViewResult.setText(t.getMessage());
+                Log.e(TAG, t.toString());
 
             }
         });
